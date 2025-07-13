@@ -1,10 +1,7 @@
 import { chromium } from 'playwright';
 import path from 'path';
 
-
-
 ( async () => {
-
 
     const optionsParse = {
         titles: {
@@ -13,7 +10,6 @@ import path from 'path';
             SHORT: "Déclaration des positions courtes nettes"
         }
     }
-
 
     const freshData = []
 
@@ -30,16 +26,43 @@ import path from 'path';
     await page.waitForSelector('.card-title', { timeout: 3000 });
     await page.waitForSelector('.info .publication-info', { timeout: 3000 });
     await page.waitForSelector('mat-card mat-card-actions button mat-icon', { timeout: 3000 });
+    await page.waitForSelector('mat-button-toggle', { timeout: 3000 });
+    await page.waitForSelector('.research-button button', { timeout: 3000 });
+
+    const filterBtns = await page.locator('mat-button-toggle').all();
+    const researchBtn = page.locator('.research-button button').first();
+
+    let index = 0;
+    for ( const btn of filterBtns) {
+        if ( index === 1 || index === 3 || index === 5 ) {
+            await btn.click();
+        }
+        index++;
+    }
+    await page.waitForTimeout(1000); // wait for the page to update
+    await researchBtn.click();
+
+    await page.waitForSelector('.more-results', { timeout: 3000 });
+    const moreBtn = page.locator('.more-results').first();
+    await moreBtn.click();
+    await page.waitForTimeout(3000); // wait for the page to update
+    await moreBtn.click();
 
     const cardsTitles = await page.locator('.card-title').all();
-    const publicationInfos = await page.locator('.publication-info').all();
+    const publicationInfos = await page.locator('.publication-info'). all();
     const dlBtns = await page.locator('mat-card mat-card-actions button mat-icon').all();
 
+    
 
-    const downloadPromise = page.waitForEvent('download');
-    await dlBtns[0].click();
-    const download = await downloadPromise;
-    await download.saveAs(path.resolve(process.cwd(), 'downloads', download.suggestedFilename()));
+
+
+
+    // const downloadPromise = page.waitForEvent('download');
+    // await dlBtns[0].click();
+    // const download = await downloadPromise;
+    // await download.saveAs(path.resolve(process.cwd(), 'downloads', download.suggestedFilename()));
+    
+
     
 
     // const dlPath = await download.path();
