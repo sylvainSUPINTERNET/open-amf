@@ -37,6 +37,7 @@ const __dirname = dirname(__filename);
 
     test.stderr.on('data', (data) => {
         console.error(`stderr: ${data}`);
+        
     });
 
     test.on('close', (code) => {
