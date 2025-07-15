@@ -2,3 +2,4 @@ node_modules
 downloads/**.pdf
 .env
 dist/**
+elevenlabs/*.mp3
