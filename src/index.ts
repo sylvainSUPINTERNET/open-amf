@@ -97,7 +97,7 @@ const response = await client.responses.create({
 
 let responseText = "";
 if ( process.env['OPENAI_DEBUG'] === 'true' ) {
-    console.log("OPEN AI DEBUG MODE")
+    console.log("OPENAI DEBUG MODE")
     responseText = "Dans l'actualité économique aujourd'hui, Renault annonce une révision à la baisse de ses objectifs pour 2025 après le premier semestre, tout en nommant Duncan Minto comme directeur général intérimaire. Air Liquide s'apprête à investir plus de 50 millions de dollars aux États-Unis, renforçant ainsi sa présence outre-Atlantique. De son côté, Orange voit BlackRock franchir le seuil des 5% des droits de vote, une indication de confiance de la part de ce géant de l'investissement. Constellium finalise avec succès son projet d'aluminium intelligent en Allemagne, illustrant son engagement dans l'innovation. Aux États-Unis, GE Vernova investit 100 millions de dollars sur deux ans en Pennsylvanie, confirmant sa stratégie de développement durable. Enfin, Société Générale cède ses parts dans sa filiale camerounaise, marquant une étape clé dans sa réorganisation internationale."
 } else {
     responseText = response.output_text;
@@ -105,7 +105,7 @@ if ( process.env['OPENAI_DEBUG'] === 'true' ) {
 
 
 if ( process.env['ELEVENLABS_DEBUG'] === 'true' ) {
-    console.log("ELEVEN LABS DEBUG MODE")
+    console.log("ELEVENLABS DEBUG MODE")
 } else {
     const audioStream = await elevenlabs.textToSpeech.stream(process.env['ELEVENLABS_VOICE_ID']!, {
         text: responseText,
