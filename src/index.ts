@@ -143,6 +143,7 @@ const promises = searchTerms.map(async (term) => {
     })
 });
 
+
 const imgResult = await Promise.all(promises);
 imgResult.forEach( (resultObj) => {
     console.log(`img src ${resultObj.term}`, resultObj.data.photos[0]?.src.original);
