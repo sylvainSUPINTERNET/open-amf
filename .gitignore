@@ -3,3 +3,6 @@ downloads/**.pdf
 .env
 dist/**
 elevenlabs/*.mp3
+autopublisher-dev-*.json
+
+client_secret.json
