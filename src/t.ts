@@ -19,7 +19,14 @@ let oauth2Client = new OAuth2(
     redirect_uris[0]
 )
 
-console.log(web);
+const authUrl = oauth2Client.generateAuthUrl({
+    access_type: 'offline',
+    scope: [
+        'https://www.googleapis.com/auth/youtube.upload'
+    ]
+});
+
+console.log(authUrl);
 
 
 
