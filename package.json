@@ -15,7 +15,9 @@
   "description": "",
   "dependencies": {
     "@elevenlabs/elevenlabs-js": "^2.6.0",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.0",
+    "express": "^5.1.0",
     "google-auth-library": "^10.1.0",
     "googleapis": "^153.0.0",
     "openai": "^5.9.1",
@@ -24,6 +26,8 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.54.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
     "@types/node": "^24.0.13"
   }
 }

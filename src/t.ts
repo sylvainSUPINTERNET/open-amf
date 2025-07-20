@@ -1,6 +1,28 @@
 import fs from 'fs';
 import {google} from 'googleapis';
 import path from 'path';
+import express from "express";
+import cors from "cors";
+
+const PORT = process.env['PORT'] || 4321;
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.get('/oauth2/google/callback', async (req, res, next) => {
+    res.status(200).send({
+        message: "Please copy the code below and paste it in your terminal to continue.",
+        code : req.query.code,
+        scope: req.query.scope
+    })
+})
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+
+
 
 let OAuth2 = google.auth.OAuth2;
 
@@ -26,7 +48,7 @@ const authUrl = oauth2Client.generateAuthUrl({
     ]
 });
 
-console.log(authUrl);
+console.log(`Please visit URL and copy the code after login : ${authUrl}`);
 
 
 
