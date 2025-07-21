@@ -1,33 +1,12 @@
 import fs from 'fs';
-import {google} from 'googleapis';
+import {google, youtube_v3} from 'googleapis';
 import path from 'path';
 import express from "express";
 import cors from "cors";
-
-const PORT = process.env['PORT'] || 4321;
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-app.get('/oauth2/google/callback', async (req, res, next) => {
-    res.status(200).send({
-        message: "Please copy the code below and paste it in your terminal to continue.",
-        code : req.query.code,
-        scope: req.query.scope
-    })
-})
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
-
-
-
+import { GetTokenResponse } from 'google-auth-library/build/src/auth/oauth2client.js';
 
 let OAuth2 = google.auth.OAuth2;
-
 // import data from "../client_secret.json" assert { type: "json" };
-
 const {web}:{web:Record<string, any>}= JSON.parse(fs.readFileSync(path.join(process.cwd(), 'client_secret.json'), 'utf8'));
 const {
     client_secret,
@@ -41,14 +20,110 @@ let oauth2Client = new OAuth2(
     redirect_uris[0]
 )
 
-const authUrl = oauth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: [
-        'https://www.googleapis.com/auth/youtube.upload'
-    ]
+
+
+const PORT = process.env['PORT'] || 4321;
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.get('/oauth2/google/callback', async (req, res, next) => {  
+    
+    try {
+        const resp:GetTokenResponse = await oauth2Client.getToken(req.query.code as string);
+        const {
+            access_token,
+            refresh_token,
+            scope,
+            token_type,
+            expiry_date
+        } = resp.tokens;
+
+        oauth2Client.setCredentials({
+            access_token,
+            refresh_token,
+            scope,
+            token_type,
+            expiry_date
+        });
+        
+        const service = google.youtube('v3');
+        // service.channels.list({
+        //     auth: oauth2Client,
+        //     /* @ts-ignore */
+        //     part: 'snippet,contentDetails,statistics',
+        //     forUsername: 'GoogleDevelopers'
+        // }, function(err:any, response:any) {
+        //     if (err) {
+        //     console.log('The API returned an error: ' + err);
+        //     return;
+        //     }
+        //     var channels = response.data.items;
+        //     if (channels.length == 0) {
+        //     console.log('No channel found.');
+        //     } else {
+        //     console.log('This channel\'s ID is %s. Its title is \'%s\', and ' +
+        //                 'it has %s views.',
+        //                 channels[0].id,
+        //                 channels[0].snippet.title,
+        //                 channels[0].statistics.viewCount);
+        //     }
+        // });
+
+        const videoMetadata = {
+            snippet: {
+                title: 'Ma vidéo uploadée via API',
+                description: 'Description de ma vidéo',
+                tags: ['nodejs', 'youtube', 'api'],
+                categoryId: '22', // Catégorie "People & Blogs"
+                defaultLanguage: 'fr',
+                defaultAudioLanguage: 'fr'
+            },
+            status: {
+                privacyStatus: 'private', // 'public', 'unlisted', 'private'
+                selfDeclaredMadeForKids: false
+            }
+        };
+        
+        const response = await service.videos.insert({
+            auth: oauth2Client,
+            part: ['snippet', 'status'],
+            requestBody: videoMetadata,
+            media: {
+                body: fs.createReadStream('output.mp4') // Chemin vers votre fichier vidéo
+            }
+        });
+
+        res.status(200).send(
+            {...resp.tokens}
+        );
+        
+    } catch ( err:any ) {
+        res.status(500).send({
+            error: 'Failed to get access token',
+            details: err.message || err
+        });
+    }
+
 });
 
-console.log(`Please visit URL and copy the code after login : ${authUrl}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+
+    const authUrl = oauth2Client.generateAuthUrl({
+    access_type: 'offline',
+    scope: [
+            'https://www.googleapis.com/auth/youtube.upload',
+            'https://www.googleapis.com/auth/youtube.readonly'
+        ]
+    });
+    console.log(`Please visit URL and copy the code after login : ${authUrl}`);
+});
+
+
+
+
+
 
 
 
