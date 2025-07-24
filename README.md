@@ -20,4 +20,6 @@ ffmpeg -loop 1 -i '.\ChatGPT Image Jul 23, 2025, 12_07_40 AM.jpg' -i audio_1.mp3
 
 ffmpeg -i "concat:clip1.mp3|clip2.mp3" -acodec copy merged.mp3
 
+www.imagine.art
+
 ````
