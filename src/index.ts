@@ -13,6 +13,7 @@ import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+
 const instructions = `
 Tu es journaliste économique. Tu reçois chaque jour une liste brute d'actualités d'entreprise sous ce format :
 
