@@ -1,3 +1,7 @@
+```` bash 
+npx tsx src/index.ts
+````
+
 
 # Requirements :
 
@@ -21,5 +25,7 @@ ffmpeg -loop 1 -i '.\ChatGPT Image Jul 23, 2025, 12_07_40 AM.jpg' -i audio_1.mp3
 ffmpeg -i "concat:clip1.mp3|clip2.mp3" -acodec copy merged.mp3
 
 www.imagine.art
+
+ffmpeg -i "Sylvain_Joly_A_photo-realistic,_high-quality_looping_video_of_a_golden_lucky_c_https___cdn.imagine.art_processed_70e9f08a-50f7-4763-b2f5-889bdd1.mp4" -filter_complex "[0:v]split[main][reverse]; [reverse]reverse[rev]; [main][rev]concat=n=2:v=1:a=0,format=yuv420p" output_looped.mp4
 
 ````
