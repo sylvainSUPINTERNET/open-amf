@@ -17,6 +17,7 @@ const __dirname = dirname(__filename);
 const instructions = `
 Tu es journaliste économique. Tu reçois chaque jour une liste brute d'actualités d'entreprise sous ce format :
 
+
 [Exemple]
 
 Implanet: la gamme JAZZ homologuée en Chine
