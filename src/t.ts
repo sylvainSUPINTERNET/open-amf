@@ -20,10 +20,6 @@ let oauth2Client = new OAuth2(
     redirect_uris[0]
 )
 
-
-
-
-
 const PORT = process.env['PORT'] || 4321;
 const app = express();
 app.use(cors());
@@ -76,7 +72,7 @@ app.get('/oauth2/google/callback', async (req, res, next) => {
         const videoMetadata = {
             snippet: {
                 title: 'Ma vidéo uploadée via API',
-                description: 'Description de ma vidéo',
+                description: 'Description my first video',
                 tags: ['nodejs', 'youtube', 'api'],
                 categoryId: '22', // Catégorie "People & Blogs"
                 defaultLanguage: 'fr',
